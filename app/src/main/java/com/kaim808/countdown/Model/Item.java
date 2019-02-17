@@ -1,9 +1,5 @@
 package com.kaim808.countdown.Model;
 
-enum TimePeriod {
-    AM, PM
-}
-
 public class Item {
 
     private String title;
@@ -11,13 +7,15 @@ public class Item {
     private TimePeriod timePeriod;
     private boolean isActive;
     private int value;
+    private int increment;
 
-    public Item(String title, String formattedTime, TimePeriod timePeriod, boolean isActive, int value) {
+    public Item(String title, String formattedTime, TimePeriod timePeriod, boolean isActive, int value, int increment) {
         this.title = title;
         this.formattedTime = formattedTime;
         this.timePeriod = timePeriod;
         this.isActive = isActive;
         this.value = value;
+        this.increment = increment;
     }
 
     public String getTitle() {
@@ -58,5 +56,13 @@ public class Item {
 
     public void setValue(int value) {
         this.value = value;
+    }
+
+    public int getIncrement() {
+        return increment;
+    }
+
+    public void setIncrement(int increment) {
+        this.increment = increment;
     }
 }

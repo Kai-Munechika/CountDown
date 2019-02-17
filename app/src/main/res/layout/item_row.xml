@@ -1,67 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:padding="20dp"
+    android:orientation="horizontal"
+    tools:padding="24dp"
+    android:padding="24dp"
     >
 
     <LinearLayout
-        android:id="@+id/text_container"
-        android:layout_width="wrap_content"
+        android:id="@+id/title_points_container"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginEnd="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toStartOf="@+id/time_switch_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/value_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:textColor="#333333"
+            android:textSize="22sp"
+            tools:text="944"/>
 
-            <TextView
-                android:id="@+id/time_label"
-                tools:text="0:00"
-                android:textSize="26sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:id="@+id/time_period_label"
-                tools:text="AM"
-                android:layout_marginStart="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/increment_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp">
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="3.2dp"
+            android:textColor="#333333"
+            android:textSize="12sp"
+            tools:ignore="SmallSp"
+            tools:text="-16"/>
 
-            <TextView
-                android:id="@+id/title_label"
-                tools:text="Meal Points:"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:id="@+id/value_label"
-                tools:text="160"
-                android:layout_marginLeft="4dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
 
     </LinearLayout>
 
-    <android.support.v7.widget.SwitchCompat
+    <TextView
+        android:id="@+id/title_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="8dp"
+        android:autoSizeTextType="uniform"
+        android:gravity="bottom"
+        android:textColor="#333333"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/time_switch_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_points_container"
+        tools:text="Meal Points"/>
+
+    <LinearLayout
+        android:id="@+id/time_switch_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true"
-        />
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/formatted_time_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#777777"
+            android:textSize="16sp"
+            tools:text="0:00"/>
+
+        <TextView
+            android:id="@+id/time_period_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:textColor="#777777"
+            android:textSize="11sp"
+            tools:ignore="SmallSp"
+            tools:text="AM"/>
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="12dp"
+            android:paddingEnd="0dp"
+            />
+    </LinearLayout>
 
 
-
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>
