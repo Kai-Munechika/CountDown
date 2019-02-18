@@ -1,5 +1,8 @@
 package com.kaim808.countdown;
 
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -8,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.kaim808.countdown.Model.Item;
 import com.kaim808.countdown.Model.TimePeriod;
+import com.kaim808.countdown.View.ItemAdapter;
 
 import java.util.ArrayList;
 
@@ -36,6 +40,20 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        setupListDivider();
+    }
+
+    private void setupListDivider() {
+        int[] ATTRS = new int[]{android.R.attr.listDivider};
+
+        TypedArray a = this.obtainStyledAttributes(ATTRS);
+        Drawable divider = a.getDrawable(0);
+        int inset = getResources().getDimensionPixelSize(R.dimen.divider_margin);
+        InsetDrawable insetDivider = new InsetDrawable(divider, inset, 0, inset, 0);
+        a.recycle();
+
+        DividerItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        itemDecoration.setDrawable(insetDivider);
+        ((RecyclerView) findViewById(R.id.recyclerView)).addItemDecoration(itemDecoration);
     }
 }

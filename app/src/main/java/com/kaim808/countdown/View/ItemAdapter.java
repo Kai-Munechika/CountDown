@@ -1,4 +1,4 @@
-package com.kaim808.countdown;
+package com.kaim808.countdown.View;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.kaim808.countdown.Model.Item;
+import com.kaim808.countdown.R;
 
 import java.util.List;
 
@@ -59,7 +60,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         holder.timePeriodTextView.setText(item.getTimePeriod().name());
         holder.timeTextView.setText(item.getFormattedTime());
         holder.titleTextView.setText(item.getTitle());
-        holder.incrementTextView.setText(String.format("%s @", String.valueOf(item.getIncrement())));
+        holder.incrementTextView.setText(String.format("%s @ ", String.valueOf(item.getIncrement())));
         holder.pointsTextView.setText(String.valueOf(item.getValue()));
         holder.toggle.setChecked(item.isActive());
     }
