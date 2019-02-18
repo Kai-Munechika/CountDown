@@ -4,10 +4,13 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
 
 import com.kaim808.countdown.Model.Item;
 import com.kaim808.countdown.Model.TimePeriod;
@@ -39,6 +42,15 @@ public class MainActivity extends AppCompatActivity {
         ItemAdapter adapter = new ItemAdapter(items);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i(MainActivity.class.getSimpleName(), "tapped");
+            }
+        });
 
         setupListDivider();
     }
