@@ -27,7 +27,7 @@
             android:id="@+id/value_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#333333"
+            android:textColor="@color/primaryText"
             android:textSize="22sp"
             tools:text="944"/>
 
@@ -39,7 +39,7 @@
             android:layout_marginEnd="8dp"
             android:autoSizeTextType="uniform"
             android:gravity="bottom"
-            android:textColor="#333333"
+            android:textColor="@color/primaryText"
             android:textSize="16sp"
             tools:text="Meal Points"/>
 
@@ -61,7 +61,7 @@
             android:id="@+id/increment_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#777777"
+            android:textColor="@color/secondaryText"
             android:textSize="15sp"
             tools:ignore="SmallSp"
             tools:text="-16 @ "/>
@@ -77,7 +77,7 @@
                 android:id="@+id/formatted_time_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#777777"
+                android:textColor="@color/secondaryText"
                 android:textSize="15sp"
                 tools:text="0:00"/>
 
@@ -86,7 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:textColor="#777777"
+                android:textColor="@color/secondaryText"
                 android:textSize="11sp"
                 tools:ignore="SmallSp"
                 tools:text="AM"/>
