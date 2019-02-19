@@ -1,5 +1,6 @@
 package com.kaim808.countdown;
 
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
@@ -9,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.kaim808.countdown.Model.Item;
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i(MainActivity.class.getSimpleName(), "tapped");
+                startActivity(new Intent(MainActivity.this, ItemCreationActivity.class));
             }
         });
 
