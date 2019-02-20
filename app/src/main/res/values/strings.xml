@@ -4,4 +4,7 @@
     <string name="start_value">Start value</string>
     <string name="increment">Increment</string>
     <string name="increment_every_day_at">Increment every day at</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="create_new_counter">Create New Counter</string>
 </resources>
