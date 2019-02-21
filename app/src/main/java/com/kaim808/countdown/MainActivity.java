@@ -12,9 +12,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.kaim808.countdown.Model.Item;
-import com.kaim808.countdown.Model.TimePeriod;
-import com.kaim808.countdown.View.ItemAdapter;
+import com.kaim808.countdown.model.Item;
+import com.kaim808.countdown.model.TimePeriod;
+import com.kaim808.countdown.view.ItemAdapter;
 
 import java.util.ArrayList;
 

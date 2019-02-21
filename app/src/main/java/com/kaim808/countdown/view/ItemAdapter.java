@@ -1,4 +1,4 @@
-package com.kaim808.countdown.View;
+package com.kaim808.countdown.view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.kaim808.countdown.Model.Item;
+import com.kaim808.countdown.model.Item;
 import com.kaim808.countdown.R;
 
 import java.util.List;

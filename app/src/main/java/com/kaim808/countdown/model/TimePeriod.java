@@ -1,4 +1,4 @@
-package com.kaim808.countdown.Model;
+package com.kaim808.countdown.model;
 
 public enum TimePeriod {
     AM, PM;
