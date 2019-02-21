@@ -29,7 +29,6 @@ public class ItemCreationActivity extends AppCompatActivity {
     private EditText timeField;
     final private Item item = new Item();
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +80,7 @@ public class ItemCreationActivity extends AppCompatActivity {
                         selectedHour = 12;
                     }
                 }
-                timeField.setText(String.format(Locale.US,"%d:%02d %s", selectedHour, selectedMinute, timePeriod));
+                timeField.setText(String.format(Locale.US, "%d:%02d %s", selectedHour, selectedMinute, timePeriod));
                 item.setHour(selectedHour);
                 item.setMinute(selectedMinute);
                 item.setTimePeriod(timePeriod.equals("AM") ? Item.TimePeriod.AM : Item.TimePeriod.PM);

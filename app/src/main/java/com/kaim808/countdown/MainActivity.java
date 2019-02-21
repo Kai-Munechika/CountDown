@@ -28,24 +28,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-
-        items = new ArrayList<>();
-
-        adapter = new ItemAdapter(items);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, ItemCreationActivity.class));
-            }
-        });
-
-        setupListDivider();
+        initRecyclerView();
+        initListDividers();
+        initFab();
     }
 
     @Override
@@ -56,7 +41,16 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-    private void setupListDivider() {
+    private void initRecyclerView() {
+        items = new ArrayList<>();
+        adapter = new ItemAdapter(items);
+
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void initListDividers() {
         int[] ATTRS = new int[]{android.R.attr.listDivider};
 
         TypedArray a = this.obtainStyledAttributes(ATTRS);
@@ -68,5 +62,16 @@ public class MainActivity extends AppCompatActivity {
         DividerItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         itemDecoration.setDrawable(insetDivider);
         ((RecyclerView) findViewById(R.id.recyclerView)).addItemDecoration(itemDecoration);
+    }
+
+
+    private void initFab() {
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, ItemCreationActivity.class));
+            }
+        });
     }
 }
