@@ -1,17 +1,21 @@
 package com.kaim808.countdown.Model;
 
+import java.util.Locale;
+
 public class Item {
 
     private String title;
-    private String formattedTime;
+    private int hour;
+    private int minute;
     private TimePeriod timePeriod;
     private boolean isActive;
     private int value;
     private int increment;
 
-    public Item(String title, String formattedTime, TimePeriod timePeriod, boolean isActive, int value, int increment) {
+    public Item(String title, int hour, int minute, TimePeriod timePeriod, boolean isActive, int value, int increment) {
         this.title = title;
-        this.formattedTime = formattedTime;
+        this.hour = hour;
+        this.minute = minute;
         this.timePeriod = timePeriod;
         this.isActive = isActive;
         this.value = value;
@@ -26,12 +30,25 @@ public class Item {
         this.title = title;
     }
 
-    public String getFormattedTime() {
-        return formattedTime;
+    public int getHour() {
+        if (timePeriod == TimePeriod.PM && hour > 12) {
+            return hour - 12;
+        } else if (timePeriod == TimePeriod.AM && hour == 12) {
+            return 0;
+        }
+        return hour;
     }
 
-    public void setFormattedTime(String formattedTime) {
-        this.formattedTime = formattedTime;
+    public void setHour(int hour) {
+        this.hour = hour;
+    }
+
+    public int getMinute() {
+        return minute;
+    }
+
+    public void setMinute(int minute) {
+        this.minute = minute;
     }
 
     public TimePeriod getTimePeriod() {
@@ -64,5 +81,9 @@ public class Item {
 
     public void setIncrement(int increment) {
         this.increment = increment;
+    }
+
+    public String getFormattedTime() {
+        return String.format(Locale.US, "%s: %s", hour, minute);
     }
 }

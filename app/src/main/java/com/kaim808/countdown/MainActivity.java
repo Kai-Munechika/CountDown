@@ -30,15 +30,14 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
         items = new ArrayList<>();
-        items.add(new Item("Meal Points", "12:00", TimePeriod.AM, false, 940, -16));
-        items.add(new Item("Meal Points", "12:00", TimePeriod.AM, false, 940, -16));
-        items.add(new Item("Meal Points", "12:00", TimePeriod.AM, false, 940, -16));
-        items.add(new Item("Meal Points", "12:00", TimePeriod.AM, false, 940, -16));
-        items.add(new Item("Meal Points", "12:00", TimePeriod.AM, false, 940, -16));
-        items.add(new Item("Meal Points", "12:00", TimePeriod.AM, false, 940, -16));
-        items.add(new Item("Meal Points", "12:00", TimePeriod.AM, false, 940, -16));
-        items.add(new Item("Meal Points", "12:00", TimePeriod.AM, false, 940, -16));
-        items.add(new Item("Meal Points", "12:00", TimePeriod.AM, false, 940, -16));
+        items.add(new Item("Meal Points", 12, 45, TimePeriod.AM, false, 940, -16));
+        items.add(new Item("Meal Points", 12, 45, TimePeriod.AM, false, 940, -16));
+        items.add(new Item("Meal Points", 12, 45, TimePeriod.AM, false, 940, -16));
+        items.add(new Item("Meal Points", 12, 45, TimePeriod.AM, false, 940, -16));
+        items.add(new Item("Meal Points", 12, 45, TimePeriod.AM, false, 940, -16));
+        items.add(new Item("Meal Points", 12, 45, TimePeriod.AM, false, 940, -16));
+
+
         ItemAdapter adapter = new ItemAdapter(items);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

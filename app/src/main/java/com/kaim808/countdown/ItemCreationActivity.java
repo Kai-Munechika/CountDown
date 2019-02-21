@@ -78,7 +78,7 @@ public class ItemCreationActivity extends AppCompatActivity {
                         selectedHour = 12;
                     }
                 }
-                timeField.setText(String.format(Locale.US,"%d:%d %s", selectedHour, selectedMinute, timePeriod));
+                timeField.setText(String.format(Locale.US,"%d:%02d %s", selectedHour, selectedMinute, timePeriod));
             }
         }, hour, minute, false);
         timePicker.setTitle("Select Time");
