@@ -7,10 +7,11 @@ import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.kaim808.countdown.model.Item;
 import com.kaim808.countdown.R;
+import com.kaim808.countdown.model.Item;
 
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Item item = items.get(position);
+        final Item item = items.get(position);
 
         holder.timePeriodTextView.setText(item.getTimePeriod().name());
         holder.timeTextView.setText(item.getFormattedTime());
@@ -63,6 +64,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         holder.incrementTextView.setText(String.format("%s%s @ ", item.getIncrement() < 0 ? "-" : "+", String.valueOf(item.getIncrement())));
         holder.pointsTextView.setText(String.valueOf(item.getValue()));
         holder.toggle.setChecked(item.isActive());
+        holder.toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                item.save();
+            }
+        });
     }
 
     @Override
