@@ -1,8 +1,10 @@
 package com.kaim808.countdown.model;
 
+import com.orm.SugarRecord;
+
 import java.util.Locale;
 
-public class Item {
+public class Item extends SugarRecord<Item> {
 
     private String title;
     private int hour;
@@ -11,6 +13,9 @@ public class Item {
     private boolean isActive;
     private int value;
     private int increment;
+
+    public Item(){
+    }
 
     public Item(String title, int hour, int minute, TimePeriod timePeriod, boolean isActive, int value, int increment) {
         this.title = title;
@@ -86,4 +91,15 @@ public class Item {
     public String getFormattedTime() {
         return String.format(Locale.US, "%s: %s", hour, minute);
     }
+
+    public enum TimePeriod {
+        AM(0), PM(1);
+
+        private int type;
+
+        private TimePeriod(int period) {
+            this.type = period;
+        }
+    }
+
 }

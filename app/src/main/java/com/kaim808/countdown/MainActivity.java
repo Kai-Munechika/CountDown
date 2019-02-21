@@ -13,14 +13,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.kaim808.countdown.model.Item;
-import com.kaim808.countdown.model.TimePeriod;
 import com.kaim808.countdown.view.ItemAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<Item> items;
+    List<Item> items;
+    ItemAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +31,8 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
         items = new ArrayList<>();
-        items.add(new Item("Meal Points", 12, 45, TimePeriod.AM, false, 940, -16));
-        items.add(new Item("Meal Points", 12, 45, TimePeriod.AM, false, 940, -16));
-        items.add(new Item("Meal Points", 12, 45, TimePeriod.AM, false, 940, -16));
-        items.add(new Item("Meal Points", 12, 45, TimePeriod.AM, false, 940, -16));
-        items.add(new Item("Meal Points", 12, 45, TimePeriod.AM, false, 940, -16));
-        items.add(new Item("Meal Points", 12, 45, TimePeriod.AM, false, 940, -16));
 
-
-        ItemAdapter adapter = new ItemAdapter(items);
+        adapter = new ItemAdapter(items);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -52,6 +46,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         setupListDivider();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        items.clear();
+        items.addAll(Item.listAll(Item.class));
+        adapter.notifyDataSetChanged();
     }
 
     private void setupListDivider() {

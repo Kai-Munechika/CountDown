@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.kaim808.countdown.model.Item;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +27,7 @@ import java.util.Locale;
 public class ItemCreationActivity extends AppCompatActivity {
 
     private EditText timeField;
+    final private Item item = new Item();
 
 
     @Override
@@ -60,7 +63,7 @@ public class ItemCreationActivity extends AppCompatActivity {
     private void launchTimePicker() {
         Calendar currentTime = Calendar.getInstance();
         int hour = currentTime.get(Calendar.HOUR_OF_DAY);
-        int minute = currentTime.get(Calendar.MINUTE);
+        final int minute = currentTime.get(Calendar.MINUTE);
 
         TimePickerDialog timePicker;
         timePicker = new TimePickerDialog(ItemCreationActivity.this, new TimePickerDialog.OnTimeSetListener() {
@@ -79,6 +82,9 @@ public class ItemCreationActivity extends AppCompatActivity {
                     }
                 }
                 timeField.setText(String.format(Locale.US,"%d:%02d %s", selectedHour, selectedMinute, timePeriod));
+                item.setHour(selectedHour);
+                item.setMinute(selectedMinute);
+                item.setTimePeriod(timePeriod.equals("AM") ? Item.TimePeriod.AM : Item.TimePeriod.PM);
             }
         }, hour, minute, false);
         timePicker.setTitle("Select Time");
@@ -90,17 +96,17 @@ public class ItemCreationActivity extends AppCompatActivity {
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             View v = getCurrentFocus();
-            if ( v instanceof EditText) {
+            if (v instanceof EditText) {
                 Rect outRect = new Rect();
                 v.getGlobalVisibleRect(outRect);
-                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
+                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY())) {
                     v.clearFocus();
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
             }
         }
-        return super.dispatchTouchEvent( event );
+        return super.dispatchTouchEvent(event);
     }
 
     public void cancelPressed(View view) {
@@ -137,7 +143,12 @@ public class ItemCreationActivity extends AppCompatActivity {
         if (!allEditTextsFilled()) {
             Toast.makeText(this, "All fields must be filled", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
+            item.setTitle(((EditText) findViewById(R.id.title_field)).getText().toString());
+            item.setActive(true);
+            item.setValue(Integer.valueOf(((EditText) findViewById(R.id.start_field)).getText().toString()));
+            item.setIncrement(Integer.valueOf(((EditText) findViewById(R.id.increment_field)).getText().toString()));
+            item.save();
+            finish();
         }
     }
 
