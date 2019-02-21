@@ -60,7 +60,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         holder.timePeriodTextView.setText(item.getTimePeriod().name());
         holder.timeTextView.setText(item.getFormattedTime());
         holder.titleTextView.setText(item.getTitle());
-        holder.incrementTextView.setText(String.format("%s @ ", String.valueOf(item.getIncrement())));
+        holder.incrementTextView.setText(String.format("%s%s @ ", item.getIncrement() < 0 ? "-" : "+", String.valueOf(item.getIncrement())));
         holder.pointsTextView.setText(String.valueOf(item.getValue()));
         holder.toggle.setChecked(item.isActive());
     }

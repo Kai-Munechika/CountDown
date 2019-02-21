@@ -89,7 +89,7 @@ public class Item extends SugarRecord<Item> {
     }
 
     public String getFormattedTime() {
-        return String.format(Locale.US, "%s: %s", hour, minute);
+        return String.format(Locale.US, "%s: %02d", hour, minute);
     }
 
     public enum TimePeriod {
