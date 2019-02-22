@@ -77,7 +77,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void initFab() {
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, ItemCreationActivity.class)));
+        fab.setOnClickListener(view -> gotoItemCreation());
+    }
+
+    public void gotoItemCreation() {
+        startActivity(new Intent(MainActivity.this, ItemCreationActivity.class));
     }
 
     public static void scheduleAlarm(Context context, Item item) {

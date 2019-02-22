@@ -119,11 +119,19 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         View view = activity.findViewById(R.id.container);
         Snackbar snackbar = Snackbar.make(view, R.string.snack_bar_text, Snackbar.LENGTH_LONG);
         snackbar.setAction(R.string.snack_bar_undo, v -> undoDelete());
+
+        activity.findViewById(R.id.fab).setOnClickListener(fab -> {
+                    snackbar.dismiss();
+                    activity.gotoItemCreation();
+                }
+        );
+
         snackbar.addCallback(new Snackbar.Callback() {
 
             @Override
             public void onDismissed(Snackbar snackbar, int event) {
-                if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                // if undo was not clicked
+                if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
                     if (recentlyDeletedItem.isActive()) {
                         MainActivity.cancelAlarm(activity.getApplicationContext(), recentlyDeletedItem);
                     }
