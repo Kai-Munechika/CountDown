@@ -10,10 +10,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
 import com.kaim808.countdown.model.Item;
 import com.kaim808.countdown.view.ItemAdapter;
+import com.kaim808.countdown.view.SwipeToDeleteCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,11 +45,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void initRecyclerView() {
         items = new ArrayList<>();
-        adapter = new ItemAdapter(items);
+        adapter = new ItemAdapter(this, items);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(adapter));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     private void initListDividers() {

@@ -7,4 +7,6 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="create_new_counter">Create New Counter</string>
+    <string name="snack_bar_undo">undo</string>
+    <string name="snack_bar_text">Counter deleted</string>
 </resources>
