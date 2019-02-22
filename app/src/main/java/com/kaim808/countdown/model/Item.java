@@ -2,6 +2,7 @@ package com.kaim808.countdown.model;
 
 import com.orm.SugarRecord;
 
+import java.util.List;
 import java.util.Locale;
 
 public class Item extends SugarRecord<Item> {
@@ -90,6 +91,32 @@ public class Item extends SugarRecord<Item> {
 
     public String getFormattedTime() {
         return String.format(Locale.US, "%s:%02d", hour, minute);
+    }
+
+    public int get24HourTimeHour() {
+        int hour = getHour();
+        TimePeriod period = getTimePeriod();
+
+        if (hour == 12 && period == TimePeriod.AM) {
+            return 0;
+        } else if (hour < 12 && period == TimePeriod.AM) {
+            return hour;
+        }
+        // PMs
+        else if (hour == 12) {
+            return hour;
+        } else {
+            return hour + 12;
+        }
+    }
+
+    public static boolean anyItemsActive() {
+        return numItemsActive() >= 1;
+    }
+
+    public static int numItemsActive() {
+        List<Item> items = Item.findWithQuery(Item.class, "SELECT * FROM Item WHERE is_active = ?", "1");
+        return items.size();
     }
 
     public enum TimePeriod {

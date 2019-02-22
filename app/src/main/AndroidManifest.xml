@@ -3,15 +3,16 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.kaim808.countdown">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <application
+        android:name="com.orm.SugarApp"
         android:allowBackup="true"
-        tools:replace="android:icon"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name="com.orm.SugarApp"
+        tools:replace="android:icon"
         >
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -20,14 +21,38 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ItemCreationActivity" android:theme="@style/ItemCreationTheme"/>
+        <activity
+            android:name=".ItemCreationActivity"
+            android:theme="@style/ItemCreationTheme"/>
 
 
-        <meta-data android:name="DATABASE" android:value="my_db.db" />
-        <meta-data android:name="VERSION" android:value="3" />
-        <meta-data android:name="QUERY_LOG" android:value="true" />
-        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.kaim808.countdown.model" />
+        <meta-data
+            android:name="DATABASE"
+            android:value="my_db.db"/>
+        <meta-data
+            android:name="VERSION"
+            android:value="3"/>
+        <meta-data
+            android:name="QUERY_LOG"
+            android:value="true"/>
+        <meta-data
+            android:name="DOMAIN_PACKAGE_NAME"
+            android:value="com.kaim808.countdown.model"/>
 
+        <service
+            android:name=".UpdateCounterService"
+            android:exported="false"/>
+
+        <!-- enabled="false": the receiver will not be called unless the application explicitly enables it.-->
+        <receiver
+            android:name=".MyAlarmReceiver"
+            android:process=":remote"
+            android:enabled="false"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
