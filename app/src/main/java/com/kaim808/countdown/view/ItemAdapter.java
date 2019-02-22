@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kaim808.countdown.MainActivity;
 import com.kaim808.countdown.R;
@@ -70,7 +71,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         holder.toggle.setChecked(item.isActive());
         holder.toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                item.setActive(isChecked);
                 item.save();
+                String message = isChecked ? "Increment scheduled daily for " + item.getFormattedTime() + (item.getTimePeriod() == Item.TimePeriod.AM ? "AM" : "PM") : "Counter deactivated";
+                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
             }
         });
     }
