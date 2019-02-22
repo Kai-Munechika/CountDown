@@ -1,4 +1,4 @@
-package com.kaim808.countdown;
+package com.kaim808.countdown.activities;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -16,6 +16,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
+import com.kaim808.countdown.MyAlarmReceiver;
+import com.kaim808.countdown.R;
 import com.kaim808.countdown.model.Item;
 import com.kaim808.countdown.view.ItemAdapter;
 import com.kaim808.countdown.view.SwipeToDeleteCallback;
@@ -78,19 +80,19 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, ItemCreationActivity.class)));
     }
 
-    public void scheduleAlarm(Item item) {
+    public static void scheduleAlarm(Context context, Item item) {
 
         int hour = item.get24HourTimeHour();
         int minute = item.getMinute();
 
         // Construct an intent that will execute the AlarmReceiver
-        Intent intent = new Intent(getApplicationContext(), MyAlarmReceiver.class);
+        Intent intent = new Intent(context, MyAlarmReceiver.class);
 
         // Create a PendingIntent to be triggered when the alarm goes off
-        final PendingIntent pIntent = PendingIntent.getBroadcast(this, Math.toIntExact(item.getId()),
+        final PendingIntent pIntent = PendingIntent.getBroadcast(context, Math.toIntExact(item.getId()),
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -101,11 +103,11 @@ public class MainActivity extends AppCompatActivity {
                 AlarmManager.INTERVAL_DAY, pIntent);
     }
 
-    public void cancelAlarm(Item item) {
-        Intent intent = new Intent(getApplicationContext(), MyAlarmReceiver.class);
-        final PendingIntent pIntent = PendingIntent.getBroadcast(this, Math.toIntExact(item.getId()),
+    public static void cancelAlarm(Context context, Item item) {
+        Intent intent = new Intent(context, MyAlarmReceiver.class);
+        final PendingIntent pIntent = PendingIntent.getBroadcast(context, Math.toIntExact(item.getId()),
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarm.cancel(pIntent);
     }
 }

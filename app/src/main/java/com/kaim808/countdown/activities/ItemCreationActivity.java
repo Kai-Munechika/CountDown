@@ -1,8 +1,7 @@
-package com.kaim808.countdown;
+package com.kaim808.countdown.activities;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.icu.util.Calendar;
 import android.os.Bundle;
@@ -14,9 +13,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.kaim808.countdown.R;
 import com.kaim808.countdown.model.Item;
 
 import java.util.ArrayList;
@@ -42,21 +41,13 @@ public class ItemCreationActivity extends AppCompatActivity {
         timeField = findViewById(R.id.time_field);
         timeField.setShowSoftInputOnFocus(false);
 
-        timeField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (hasFocus) {
-                    launchTimePicker();
-                }
-            }
-        });
-
-        timeField.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        timeField.setOnFocusChangeListener((view, hasFocus) -> {
+            if (hasFocus) {
                 launchTimePicker();
             }
         });
+
+        timeField.setOnClickListener(view -> launchTimePicker());
     }
 
     private void launchTimePicker() {
@@ -65,26 +56,23 @@ public class ItemCreationActivity extends AppCompatActivity {
         final int minute = currentTime.get(Calendar.MINUTE);
 
         TimePickerDialog timePicker;
-        timePicker = new TimePickerDialog(ItemCreationActivity.this, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                String timePeriod;
-                if (selectedHour >= 12) {
-                    timePeriod = "PM";
-                    if (selectedHour > 12) {
-                        selectedHour -= 12;
-                    }
-                } else {
-                    timePeriod = "AM";
-                    if (selectedHour == 0) {
-                        selectedHour = 12;
-                    }
+        timePicker = new TimePickerDialog(ItemCreationActivity.this, (timePicker1, selectedHour, selectedMinute) -> {
+            String timePeriod;
+            if (selectedHour >= 12) {
+                timePeriod = "PM";
+                if (selectedHour > 12) {
+                    selectedHour -= 12;
                 }
-                timeField.setText(String.format(Locale.US, "%d:%02d %s", selectedHour, selectedMinute, timePeriod));
-                item.setHour(selectedHour);
-                item.setMinute(selectedMinute);
-                item.setTimePeriod(timePeriod.equals("AM") ? Item.TimePeriod.AM : Item.TimePeriod.PM);
+            } else {
+                timePeriod = "AM";
+                if (selectedHour == 0) {
+                    selectedHour = 12;
+                }
             }
+            timeField.setText(String.format(Locale.US, "%d:%02d %s", selectedHour, selectedMinute, timePeriod));
+            item.setHour(selectedHour);
+            item.setMinute(selectedMinute);
+            item.setTimePeriod(timePeriod.equals("AM") ? Item.TimePeriod.AM : Item.TimePeriod.PM);
         }, hour, minute, false);
         timePicker.setTitle("Select Time");
         timePicker.show();
@@ -116,20 +104,14 @@ public class ItemCreationActivity extends AppCompatActivity {
 
             builder.setPositiveButton(
                     "Yes",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                            finish();
-                        }
+                    (dialog, id) -> {
+                        dialog.cancel();
+                        finish();
                     });
 
             builder.setNegativeButton(
                     "No",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
+                    (dialog, id) -> dialog.cancel());
 
             AlertDialog alert = builder.create();
             alert.show();
@@ -147,6 +129,11 @@ public class ItemCreationActivity extends AppCompatActivity {
             item.setValue(Integer.valueOf(((EditText) findViewById(R.id.start_field)).getText().toString()));
             item.setIncrement(Integer.valueOf(((EditText) findViewById(R.id.increment_field)).getText().toString()));
             item.save();
+
+            MainActivity.scheduleAlarm(getApplicationContext(), item);
+            String message = String.format("Increment scheduled daily for %s %s", item.getFormattedTime(), item.getTimePeriod().name());
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
             finish();
         }
     }

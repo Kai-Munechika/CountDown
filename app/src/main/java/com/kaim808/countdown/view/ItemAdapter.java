@@ -9,20 +9,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kaim808.countdown.MainActivity;
 import com.kaim808.countdown.MyAlarmReceiver;
 import com.kaim808.countdown.R;
+import com.kaim808.countdown.activities.MainActivity;
 import com.kaim808.countdown.model.Item;
 
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView pointsTextView;
         TextView incrementTextView;
@@ -31,7 +30,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         TextView timePeriodTextView;
         SwitchCompat toggle;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             pointsTextView = itemView.findViewById(R.id.value_label);
             incrementTextView = itemView.findViewById(R.id.increment_label);
@@ -72,33 +71,31 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         holder.incrementTextView.setText(String.format("%s%s @ ", item.getIncrement() < 0 ? "" : "+", String.valueOf(item.getIncrement())));
         holder.pointsTextView.setText(String.valueOf(item.getValue()));
         holder.toggle.setChecked(item.isActive());
-        holder.toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        holder.toggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
 
-                // if this is the first item requiring an alarm
-                if (!Item.anyItemsActive() && isChecked) {
-                    MyAlarmReceiver.enableReceiver(activity);
-                    Log.i("ItemAdapter", "receiver enabled");
-                }
-
-                // if this is the last active item being switched off
-                else if (Item.numItemsActive() == 1 && !isChecked) {
-                    MyAlarmReceiver.disableReceiver(activity);
-                    Log.i("ItemAdapter", "receiver disabled");
-                }
-
-                item.setActive(isChecked);
-                item.save();
-
-                if (isChecked) {
-                    activity.scheduleAlarm(item);
-                } else {
-                    activity.cancelAlarm(item);
-                }
-
-                String message = isChecked ? "Increment scheduled daily for " + item.getFormattedTime() + " " + item.getTimePeriod().name() : "Counter deactivated";
-                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+            // if this is the first item requiring an alarm
+            if (!Item.anyItemsActive() && isChecked) {
+                MyAlarmReceiver.enableReceiver(activity);
+                Log.i("ItemAdapter", "receiver enabled");
             }
+
+            // if this is the last active item being switched off
+            else if (Item.numItemsActive() == 1 && !isChecked) {
+                MyAlarmReceiver.disableReceiver(activity);
+                Log.i("ItemAdapter", "receiver disabled");
+            }
+
+            item.setActive(isChecked);
+            item.save();
+
+            if (isChecked) {
+                MainActivity.scheduleAlarm(activity.getApplicationContext(), item);
+            } else {
+                MainActivity.cancelAlarm(activity.getApplicationContext(), item);
+            }
+
+            String message = isChecked ? String.format("Increment scheduled daily for %s %s", item.getFormattedTime(), item.getTimePeriod().name()) : "Counter deactivated";
+            Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
         });
     }
 

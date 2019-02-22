@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:icon"
         >
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ItemCreationActivity"
+            android:name=".activities.ItemCreationActivity"
             android:theme="@style/ItemCreationTheme"/>
 
 
