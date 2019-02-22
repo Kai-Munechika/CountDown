@@ -124,6 +124,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             @Override
             public void onDismissed(Snackbar snackbar, int event) {
                 if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                    if (recentlyDeletedItem.isActive()) {
+                        MainActivity.cancelAlarm(activity.getApplicationContext(), recentlyDeletedItem);
+                    }
+
                     recentlyDeletedItem.delete();
                 }
             }
