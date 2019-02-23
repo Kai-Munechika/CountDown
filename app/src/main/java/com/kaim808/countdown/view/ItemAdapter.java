@@ -64,6 +64,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         final Item item = items.get(position);
         final MainActivity activity = this.activity;
 
+        // don't trigger check changed when we recycle/set checked for a different item
+        holder.toggle.setOnCheckedChangeListener(null);
+
         holder.timePeriodTextView.setText(item.getTimePeriod().name());
         holder.timeTextView.setText(item.getFormattedTime());
         holder.titleTextView.setText(item.getTitle());
