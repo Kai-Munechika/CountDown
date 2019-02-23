@@ -64,6 +64,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         final Item item = items.get(position);
         final MainActivity activity = this.activity;
 
+        holder.itemView.setOnClickListener(view -> activity.itemClicked(item));
+
         // don't trigger check changed when we recycle/set checked for a different item
         holder.toggle.setOnCheckedChangeListener(null);
 

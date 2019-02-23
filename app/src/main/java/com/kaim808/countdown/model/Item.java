@@ -36,7 +36,7 @@ public class Item extends SugarRecord<Item> {
         this.title = title;
     }
 
-    public int getHour() {
+    private int getHour() {
         if (timePeriod == TimePeriod.PM && hour > 12) {
             return hour - 12;
         } else if (timePeriod == TimePeriod.AM && hour == 12) {
@@ -94,6 +94,9 @@ public class Item extends SugarRecord<Item> {
     }
 
     public int get24HourTimeHour() {
+        // case when default values are unchanged
+        if (hour == 0) { return 0; }
+
         int hour = getHour();
         TimePeriod period = getTimePeriod();
 
@@ -129,7 +132,7 @@ public class Item extends SugarRecord<Item> {
 
         private int type;
 
-        private TimePeriod(int period) {
+        TimePeriod(int period) {
             this.type = period;
         }
     }

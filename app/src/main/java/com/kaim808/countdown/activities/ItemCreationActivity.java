@@ -2,10 +2,12 @@ package com.kaim808.countdown.activities;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -26,15 +28,35 @@ import java.util.Locale;
 public class ItemCreationActivity extends AppCompatActivity {
 
     private EditText timeField;
-    final private Item item = new Item();
+    private Item item;
+    private boolean editingItem;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_creation);
 
+        Intent intent = getIntent();
+        long itemId = intent.getLongExtra(MainActivity.ITEM_ID, -1);
+
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+
+        editingItem = itemId != -1;
+        if (editingItem) {
+            item = Item.findById(Item.class, itemId);
+            actionBar.setTitle(R.string.edit_counter);
+            ((EditText) findViewById(R.id.title_field)).setText(item.getTitle());
+            ((EditText) findViewById(R.id.start_field)).setText(String.valueOf(item.getValue()));
+            ((EditText) findViewById(R.id.increment_field)).setText(String.valueOf(item.getIncrement()));
+            ((EditText) findViewById(R.id.time_field)).setText(String.format("%s %s", item.getFormattedTime(), item.getTimePeriod().name()));
+        } else {
+            item = new Item();
+            actionBar.setTitle(R.string.create_new_counter);
+        }
+
+
         initTimeField();
-        getSupportActionBar().setTitle(R.string.create_new_counter);
     }
 
     private void initTimeField() {
@@ -73,7 +95,7 @@ public class ItemCreationActivity extends AppCompatActivity {
             item.setHour(selectedHour);
             item.setMinute(selectedMinute);
             item.setTimePeriod(timePeriod.equals("AM") ? Item.TimePeriod.AM : Item.TimePeriod.PM);
-        }, hour, minute, false);
+        }, editingItem ? item.get24HourTimeHour() : hour, editingItem ? item.getMinute() : minute, false);
         timePicker.setTitle("Select Time");
         timePicker.show();
     }
@@ -99,7 +121,7 @@ public class ItemCreationActivity extends AppCompatActivity {
     public void cancelPressed(View view) {
         if (anyEditTextsFilled()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Cancel creating this item?");
+            builder.setMessage(editingItem ? "Cancel editing this item?" : "Cancel creating this item?");
             builder.setCancelable(true);
 
             builder.setPositiveButton(
@@ -129,6 +151,10 @@ public class ItemCreationActivity extends AppCompatActivity {
             item.setValue(Integer.valueOf(((EditText) findViewById(R.id.start_field)).getText().toString()));
             item.setIncrement(Integer.valueOf(((EditText) findViewById(R.id.increment_field)).getText().toString()));
             item.save();
+
+            // if we're editing an active counter, we want its previous scheduled alarm to be cancelled
+            // the schedule is identified by item.getId(). If we've created a new item, this does nothing
+            MainActivity.cancelAlarm(getApplicationContext(), item);
 
             MainActivity.scheduleAlarm(getApplicationContext(), item);
             String message = String.format("Increment scheduled daily for %s %s", item.getFormattedTime(), item.getTimePeriod().name());
@@ -161,7 +187,7 @@ public class ItemCreationActivity extends AppCompatActivity {
     private List<EditText> getEditTexts() {
         ArrayList<EditText> editTexts = new ArrayList<>();
         for (int id : Arrays.asList(R.id.title_field, R.id.start_field, R.id.increment_field, R.id.time_field)) {
-            editTexts.add((EditText) findViewById(id));
+            editTexts.add((findViewById(id)));
         }
 
         return editTexts;

@@ -9,4 +9,5 @@
     <string name="create_new_counter">Create New Counter</string>
     <string name="snack_bar_undo">undo</string>
     <string name="snack_bar_text">Counter deleted</string>
+    <string name="edit_counter">Edit Counter</string>
 </resources>

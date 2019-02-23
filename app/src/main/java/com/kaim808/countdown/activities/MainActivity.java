@@ -43,7 +43,10 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals(COUNTER_BROADCAST)) {
+            String action = intent.getAction();
+            assert action != null;
+
+            if(action.equals(COUNTER_BROADCAST)) {
                 if (adapter != null) {
                     adapter.refresh();
                 }
@@ -93,12 +96,9 @@ public class MainActivity extends AppCompatActivity {
         swipeContainer = findViewById(R.id.swipeContainer);
 
         // Setup refresh listener which triggers new data loading
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                adapter.refresh();
-                swipeContainer.setRefreshing(false);
-            }
+        swipeContainer.setOnRefreshListener(() -> {
+            adapter.refresh();
+            swipeContainer.setRefreshing(false);
         });
         // Configure the refreshing colors
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
@@ -199,5 +199,12 @@ public class MainActivity extends AppCompatActivity {
         alarm.cancel(pIntent);
 
         Log.i("AlarmRelated", "counter " + item.getTitle() +  " cancelled");
+    }
+
+
+    public void itemClicked(Item item) {
+        Intent intent = new Intent(MainActivity.this, ItemCreationActivity.class);
+        intent.putExtra(ITEM_ID, item.getId());
+        startActivity(intent);
     }
 }
