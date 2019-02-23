@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.kaim808.countdown.activities.MainActivity;
@@ -21,11 +20,7 @@ public class MyAlarmReceiver extends BroadcastReceiver {
 
         Intent i = new Intent(context, UpdateCounterService.class);
         i.putExtra(MainActivity.ITEM_ID, itemId);
-
-        // Explicitly specify that UpdateCounterService will handle the intent.
-        ComponentName comp = new ComponentName(context.getPackageName(), UpdateCounterService.class.getName());
-        // Start the service, keeping the device awake while it is launching.
-        ContextCompat.startForegroundService(context, i.setComponent(comp));
+        context.startForegroundService(i);
 
         Log.i("AlarmRelated", "UpdateCounterService triggered");
     }

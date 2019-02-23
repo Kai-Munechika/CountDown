@@ -7,8 +7,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.LocalBroadcastManager;
@@ -19,30 +17,33 @@ import com.kaim808.countdown.model.Item;
 
 public class UpdateCounterService extends IntentService {
 
-    private Handler handler;
-
     public UpdateCounterService() {
         super("UpdateCounterService");
-        handler = new Handler();
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        if (Build.VERSION.SDK_INT >= 26) {
-            String CHANNEL_ID = "my_channel_01";
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_DEFAULT);
 
-            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
+        Intent notificationIntent = new Intent(this, MainActivity.class);
 
-            Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                    .setContentTitle("")
-                    .setContentText("").build();
+        String CHANNEL_ID = "CHANNEL_ID";
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+                "Channel human readable title",
+                NotificationManager.IMPORTANCE_DEFAULT);
 
-            startForeground(1, notification);
-        }
+        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+                notificationIntent, 0);
+
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("My Awesome App")
+                .setContentText("Doing some work...")
+                .setContentIntent(pendingIntent).build();
+
+        startForeground(1337, notification);
     }
 
     @Override
@@ -79,7 +80,7 @@ public class UpdateCounterService extends IntentService {
         channel.setDescription("Reminders");
 
         // disable vibration
-        channel.setVibrationPattern(new long[]{ 0 });
+        channel.setVibrationPattern(new long[]{0});
         channel.enableVibration(true);
 
         // Register the channel with the notifications manager
