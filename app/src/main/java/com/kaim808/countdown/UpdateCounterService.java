@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -29,6 +30,11 @@ public class UpdateCounterService extends IntentService {
 
             Log.i("AlarmRelated", "item incremented");
             handler.post(new DisplayToast(this, String.format("%s counter incremented", item.getTitle())));
+
+            System.out.println("intent Received");
+            Intent RTReturn = new Intent(MainActivity.COUNTER_BROADCAST);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(RTReturn);
+            Log.i("AlarmRelated", "Broadcast sent");
         } else {
             Log.i("AlarmRelated", "UpdateCounterService called on deleted item, nothing done");
         }

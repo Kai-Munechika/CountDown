@@ -2,14 +2,17 @@ package com.kaim808.countdown.activities;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.InsetDrawable;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -29,12 +32,25 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static String COUNTER_BROADCAST = "COUNTER_BROADCAST";
     public static String ITEM_ID = "ITEM_ID";
 
     private SwipeRefreshLayout swipeContainer;
     List<Item> items;
     RecyclerView recyclerView;
     ItemAdapter adapter;
+
+    private BroadcastReceiver bReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.getAction().equals(COUNTER_BROADCAST)) {
+                if (adapter != null) {
+                    adapter.refresh();
+                }
+            }
+        }
+    };
+    LocalBroadcastManager bManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +61,11 @@ public class MainActivity extends AppCompatActivity {
         initRecyclerView();
         initListDividers();
         initFab();
+
+        bManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(COUNTER_BROADCAST);
+        bManager.registerReceiver(bReceiver, intentFilter);
     }
 
     @Override
@@ -60,6 +81,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        bManager.unregisterReceiver(bReceiver);
     }
 
     private void initSwipeContainer() {
@@ -171,6 +198,6 @@ public class MainActivity extends AppCompatActivity {
         AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarm.cancel(pIntent);
 
-        Log.i("AlarmRelated", "Alarm cancelled");
+        Log.i("AlarmRelated", "counter " + item.getTitle() +  " cancelled");
     }
 }
