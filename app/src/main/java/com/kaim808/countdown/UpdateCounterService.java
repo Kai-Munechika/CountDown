@@ -1,11 +1,13 @@
 package com.kaim808.countdown;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -25,16 +27,39 @@ public class UpdateCounterService extends IntentService {
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        if (Build.VERSION.SDK_INT >= 26) {
+            String CHANNEL_ID = "my_channel_01";
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_DEFAULT);
+
+            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
+
+            Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setContentTitle("")
+                    .setContentText("").build();
+
+            startForeground(1, notification);
+        }
+    }
+
+    @Override
     protected void onHandleIntent(Intent intent) {
         long itemId = intent.getLongExtra(MainActivity.ITEM_ID, -1);
         Item item = Item.findById(Item.class, itemId);
-        if (item != null && item.isActive()) {
-            item.setValue(item.getValue() + item.getIncrement());
-            item.save();
+        if (item != null) {
+            if (item.isActive()) {
+                item.setValue(item.getValue() + item.getIncrement());
+                item.save();
 
-            Log.i("AlarmRelated", "item incremented");
-            sendBroadcast();
-            sendNotification(item);
+                Log.i("AlarmRelated", "item incremented");
+                sendBroadcast();
+                sendNotification(item);
+            } else {
+                MainActivity.cancelAlarm(getApplicationContext(), item);
+            }
 
         } else {
             Log.i("AlarmRelated", "UpdateCounterService called on deleted item, nothing done");
