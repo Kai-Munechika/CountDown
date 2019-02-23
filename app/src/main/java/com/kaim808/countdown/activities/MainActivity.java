@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, pIntent);
 
-        Log.i("AlarmRelated", "Alarm scheduled");
+        Log.i("AlarmRelated", "Alarm scheduled for " + item.getFormattedTime() + " " + item.getTimePeriod().name());
     }
 
     public static void cancelAlarm(Context context, Item item) {

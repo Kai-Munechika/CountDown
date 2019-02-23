@@ -1,15 +1,22 @@
 package com.kaim808.countdown;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.kaim808.countdown.activities.MainActivity;
 import com.kaim808.countdown.model.Item;
 
 public class UpdateCounterService extends IntentService {
+
+    private Handler handler;
+
     public UpdateCounterService() {
         super("UpdateCounterService");
+        handler = new Handler();
     }
 
     @Override
@@ -21,8 +28,24 @@ public class UpdateCounterService extends IntentService {
             item.save();
 
             Log.i("AlarmRelated", "item incremented");
+            handler.post(new DisplayToast(this, String.format("%s counter incremented", item.getTitle())));
         } else {
-            Log.i("AlarmRelated", "UpdateCounterService called on deleted item, nothin done");
+            Log.i("AlarmRelated", "UpdateCounterService called on deleted item, nothing done");
+        }
+    }
+
+    class DisplayToast implements Runnable {
+        private final Context mContext;
+        String mText;
+
+        DisplayToast(Context mContext, String text){
+            this.mContext = mContext;
+            mText = text;
+        }
+
+        public void run(){
+            Toast.makeText(mContext, mText, Toast.LENGTH_SHORT).show();
         }
     }
 }
+
