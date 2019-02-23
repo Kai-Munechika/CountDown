@@ -121,6 +121,14 @@ public class MainActivity extends AppCompatActivity {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
+
+        // if the input hour and minute is before the current time, move the calendar 1 day forward
+        if (hour < calendar.get(Calendar.HOUR_OF_DAY)) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+        } else if (hour == calendar.get(Calendar.HOUR_OF_DAY) && minute <= calendar.get(Calendar.MINUTE)) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+        }
+
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, 0);
