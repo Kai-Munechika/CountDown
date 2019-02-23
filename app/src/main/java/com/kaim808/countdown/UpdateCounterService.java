@@ -30,10 +30,9 @@ public class UpdateCounterService extends IntentService {
 
             Log.i("AlarmRelated", "item incremented");
             handler.post(new DisplayToast(this, String.format("%s counter incremented", item.getTitle())));
-
-            System.out.println("intent Received");
-            Intent RTReturn = new Intent(MainActivity.COUNTER_BROADCAST);
-            LocalBroadcastManager.getInstance(this).sendBroadcast(RTReturn);
+            
+            Intent broadcastIntent = new Intent(MainActivity.COUNTER_BROADCAST);
+            LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent);
             Log.i("AlarmRelated", "Broadcast sent");
         } else {
             Log.i("AlarmRelated", "UpdateCounterService called on deleted item, nothing done");

@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     ItemAdapter adapter;
 
-    private BroadcastReceiver bReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(COUNTER_BROADCAST)) {
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-    LocalBroadcastManager bManager;
+    LocalBroadcastManager broadcastManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +62,10 @@ public class MainActivity extends AppCompatActivity {
         initListDividers();
         initFab();
 
-        bManager = LocalBroadcastManager.getInstance(this);
+        broadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(COUNTER_BROADCAST);
-        bManager.registerReceiver(bReceiver, intentFilter);
+        broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        bManager.unregisterReceiver(bReceiver);
+        broadcastManager.unregisterReceiver(broadcastReceiver);
     }
 
     private void initSwipeContainer() {
