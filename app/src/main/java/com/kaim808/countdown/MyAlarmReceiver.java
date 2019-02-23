@@ -5,6 +5,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.util.Log;
+
+import com.kaim808.countdown.activities.MainActivity;
 
 public class MyAlarmReceiver extends BroadcastReceiver {
     public static final String ACTION = "com.kaim808.countdown.alarm";
@@ -12,8 +15,14 @@ public class MyAlarmReceiver extends BroadcastReceiver {
     // Triggered by the Alarm periodically (starts the service to run task)
     @Override
     public void onReceive(Context context, Intent intent) {
+        long itemId = intent.getLongExtra(MainActivity.ITEM_ID, -1);
+        if (itemId == -1) { Log.i("AlarmRelated", "No itemId received"); return; }
+
         Intent i = new Intent(context, UpdateCounterService.class);
+        i.putExtra(MainActivity.ITEM_ID, itemId);
         context.startService(i);
+
+        Log.i("AlarmRelated", "UpdateCounterService triggered");
     }
 
     // Once you enable the receiver this way, it will stay enabled, even if the user reboots the device.

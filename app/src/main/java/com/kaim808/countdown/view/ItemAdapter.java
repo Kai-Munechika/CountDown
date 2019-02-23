@@ -5,14 +5,12 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kaim808.countdown.MyAlarmReceiver;
 import com.kaim808.countdown.R;
 import com.kaim808.countdown.activities.MainActivity;
 import com.kaim808.countdown.model.Item;
@@ -72,19 +70,6 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         holder.pointsTextView.setText(String.valueOf(item.getValue()));
         holder.toggle.setChecked(item.isActive());
         holder.toggle.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
-            // if this is the first item requiring an alarm
-            if (!Item.anyItemsActive() && isChecked) {
-                MyAlarmReceiver.enableReceiver(activity);
-                Log.i("ItemAdapter", "receiver enabled");
-            }
-
-            // if this is the last active item being switched off
-            else if (Item.numItemsActive() == 1 && !isChecked) {
-                MyAlarmReceiver.disableReceiver(activity);
-                Log.i("ItemAdapter", "receiver disabled");
-            }
-
             item.setActive(isChecked);
             item.save();
 
@@ -133,6 +118,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                 // if undo was not clicked
                 if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
                     if (recentlyDeletedItem.isActive()) {
+                        recentlyDeletedItem.setActive(false);
+                        recentlyDeletedItem.save();
                         MainActivity.cancelAlarm(activity.getApplicationContext(), recentlyDeletedItem);
                     }
 

@@ -15,6 +15,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 
 import com.kaim808.countdown.MyAlarmReceiver;
 import com.kaim808.countdown.R;
@@ -26,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static String ITEM_ID = "ITEM_ID";
 
     List<Item> items;
     ItemAdapter adapter;
@@ -85,15 +88,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void scheduleAlarm(Context context, Item item) {
+        // if this is the first item requiring an alarm
+        if (Item.numItemsActive() == 1) {
+            MyAlarmReceiver.enableReceiver(context);
+            Log.i("AlarmRelated", "receiver enabled");
+        }
 
         int hour = item.get24HourTimeHour();
         int minute = item.getMinute();
 
         // Construct an intent that will execute the AlarmReceiver
         Intent intent = new Intent(context, MyAlarmReceiver.class);
+        long itemId = item.getId();
+        intent.putExtra(ITEM_ID, itemId);
 
         // Create a PendingIntent to be triggered when the alarm goes off
-        final PendingIntent pIntent = PendingIntent.getBroadcast(context, Math.toIntExact(item.getId()),
+        final PendingIntent pIntent = PendingIntent.getBroadcast(context, Math.toIntExact(itemId),
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -102,16 +112,27 @@ public class MainActivity extends AppCompatActivity {
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0);
 
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY, pIntent);
+
+        Log.i("AlarmRelated", "Alarm scheduled");
     }
 
     public static void cancelAlarm(Context context, Item item) {
+        // if this is the last active item being switched off
+        if (Item.numItemsActive() == 0) {
+            MyAlarmReceiver.disableReceiver(context);
+            Log.i("AlarmRelated", "receiver disabled");
+        }
+
         Intent intent = new Intent(context, MyAlarmReceiver.class);
         final PendingIntent pIntent = PendingIntent.getBroadcast(context, Math.toIntExact(item.getId()),
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarm.cancel(pIntent);
+
+        Log.i("AlarmRelated", "Alarm cancelled");
     }
 }
