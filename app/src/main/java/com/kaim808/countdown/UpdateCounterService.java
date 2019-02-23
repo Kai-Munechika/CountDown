@@ -52,6 +52,11 @@ public class UpdateCounterService extends IntentService {
         int importance = NotificationManager.IMPORTANCE_DEFAULT;
         NotificationChannel channel = new NotificationChannel("myChannelId", "My Channel", importance);
         channel.setDescription("Reminders");
+
+        // disable vibration
+        channel.setVibrationPattern(new long[]{ 0 });
+        channel.enableVibration(true);
+
         // Register the channel with the notifications manager
         NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.createNotificationChannel(channel);
@@ -62,7 +67,7 @@ public class UpdateCounterService extends IntentService {
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setVibrate(new long[]{0L})
                         .setAutoCancel(true)
-                        .setContentText(String.format("%s counter incremented to %s", item.getTitle(), String.valueOf(item.getValue())));
+                        .setContentText(String.format("%s counter %s to %s.", item.getTitle(), item.getIncrement() < 0 ? "decremented" : "incremented", String.valueOf(item.getValue())));
 
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(this.getApplicationContext(), MainActivity.class);
