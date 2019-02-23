@@ -10,6 +10,7 @@ import android.graphics.drawable.InsetDrawable;
 import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,7 +31,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static String ITEM_ID = "ITEM_ID";
 
+    private SwipeRefreshLayout swipeContainer;
     List<Item> items;
+    RecyclerView recyclerView;
     ItemAdapter adapter;
 
     @Override
@@ -38,19 +41,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initSwipeContainer();
         initRecyclerView();
         initListDividers();
         initFab();
-
-        Log.i("DeletedItem", "OnCreate: Num items: " + Item.numItems());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        items.clear();
-        items.addAll(Item.listAll(Item.class));
-        adapter.notifyDataSetChanged();
+        adapter.refresh();
     }
 
     @Override
@@ -62,11 +62,30 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    private void initSwipeContainer() {
+        swipeContainer = findViewById(R.id.swipeContainer);
+
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                adapter.refresh();
+                swipeContainer.setRefreshing(false);
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+    }
+
     private void initRecyclerView() {
         items = new ArrayList<>();
         adapter = new ItemAdapter(this, items);
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -125,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         // if the input hour and minute is before the current time, move the calendar 1 day forward
         if (hour < calendar.get(Calendar.HOUR_OF_DAY)) {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
-        } else if (hour == calendar.get(Calendar.HOUR_OF_DAY) && minute <= calendar.get(Calendar.MINUTE)) {
+        } else if (hour == calendar.get(Calendar.HOUR_OF_DAY) && minute < calendar.get(Calendar.MINUTE)) {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
 

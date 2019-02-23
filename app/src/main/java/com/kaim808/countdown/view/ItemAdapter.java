@@ -143,4 +143,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     Context getContext() {
         return activity;
     }
+
+    public void refresh() {
+        items.clear();
+        items.addAll(Item.listAll(Item.class));
+        notifyDataSetChanged();
+    }
 }

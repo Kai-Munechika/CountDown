@@ -38,12 +38,12 @@ public class UpdateCounterService extends IntentService {
         private final Context mContext;
         String mText;
 
-        DisplayToast(Context mContext, String text){
+        DisplayToast(Context mContext, String text) {
             this.mContext = mContext;
             mText = text;
         }
 
-        public void run(){
+        public void run() {
             Toast.makeText(mContext, mText, Toast.LENGTH_SHORT).show();
         }
     }
