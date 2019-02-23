@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,10 +90,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         return items.size();
     }
 
-    private Item recentlyDeletedItem;
+    public Item recentlyDeletedItem;
     private int recentlyDeletedItemPosition;
 
     void deleteItem(int position) {
+        if (recentlyDeletedItem != null) { recentlyDeletedItem.delete(); }
         recentlyDeletedItem = items.get(position);
         recentlyDeletedItemPosition = position;
         items.remove(position);
@@ -100,9 +102,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         showUndoSnackbar();
     }
 
+    private Snackbar snackbar;
+
     private void showUndoSnackbar() {
         View view = activity.findViewById(R.id.container);
-        Snackbar snackbar = Snackbar.make(view, R.string.snack_bar_text, Snackbar.LENGTH_LONG);
+        if (snackbar != null) { snackbar.dismiss(); }
+        snackbar = Snackbar.make(view, R.string.snack_bar_text, Snackbar.LENGTH_LONG);
         snackbar.setAction(R.string.snack_bar_undo, v -> undoDelete());
 
         activity.findViewById(R.id.fab).setOnClickListener(fab -> {
@@ -116,10 +121,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             @Override
             public void onDismissed(Snackbar snackbar, int event) {
                 // if undo was not clicked
-                if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
+                Log.i("DeletedItem", "onDismissed triggered");
+                if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT || event == Snackbar.Callback.DISMISS_EVENT_MANUAL) {
                     if (recentlyDeletedItem.isActive()) {
                         recentlyDeletedItem.setActive(false);
-                        recentlyDeletedItem.save();
                         MainActivity.cancelAlarm(activity.getApplicationContext(), recentlyDeletedItem);
                     }
 

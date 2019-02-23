@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         initRecyclerView();
         initListDividers();
         initFab();
+
+        Log.i("DeletedItem", "OnCreate: Num items: " + Item.numItems());
     }
 
     @Override
@@ -49,6 +51,15 @@ public class MainActivity extends AppCompatActivity {
         items.clear();
         items.addAll(Item.listAll(Item.class));
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onPause() {
+        if (adapter.recentlyDeletedItem != null) {
+            adapter.recentlyDeletedItem.delete();
+        }
+
+        super.onPause();
     }
 
     private void initRecyclerView() {

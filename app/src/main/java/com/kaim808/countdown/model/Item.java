@@ -119,6 +119,11 @@ public class Item extends SugarRecord<Item> {
         return items.size();
     }
 
+    public static int numItems() {
+        List<Item> items = Item.findWithQuery(Item.class, "SELECT * FROM Item");
+        return items.size();
+    }
+
     public enum TimePeriod {
         AM(0), PM(1);
 
