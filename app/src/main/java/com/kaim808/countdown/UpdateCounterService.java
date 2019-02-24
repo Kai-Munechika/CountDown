@@ -93,7 +93,7 @@ public class UpdateCounterService extends IntentService {
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setVibrate(new long[]{0L})
                         .setAutoCancel(true)
-                        .setContentText(String.format("%s counter %s to %s.", item.getTitle(), item.getIncrement() < 0 ? "decremented" : "incremented", String.valueOf(item.getValue())));
+                        .setContentText(String.format("%s counter %s to %s.", item.getTitle(), item.getIncrement() < 0 ? "decremented" : "incremented", item.getValueString()));
 
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(this.getApplicationContext(), MainActivity.class);

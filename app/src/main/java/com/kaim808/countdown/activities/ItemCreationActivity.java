@@ -47,8 +47,8 @@ public class ItemCreationActivity extends AppCompatActivity {
             item = Item.findById(Item.class, itemId);
             actionBar.setTitle(R.string.edit_counter);
             ((EditText) findViewById(R.id.title_field)).setText(item.getTitle());
-            ((EditText) findViewById(R.id.start_field)).setText(String.valueOf(item.getValue()));
-            ((EditText) findViewById(R.id.increment_field)).setText(String.valueOf(item.getIncrement()));
+            ((EditText) findViewById(R.id.start_field)).setText(item.getValueString());
+            ((EditText) findViewById(R.id.increment_field)).setText(item.getIncrementString());
             ((EditText) findViewById(R.id.time_field)).setText(String.format("%s %s", item.getFormattedTime(), item.getTimePeriod().name()));
         } else {
             item = new Item();
@@ -148,8 +148,8 @@ public class ItemCreationActivity extends AppCompatActivity {
         } else {
             item.setTitle(((EditText) findViewById(R.id.title_field)).getText().toString());
             item.setActive(true);
-            item.setValue(Integer.valueOf(((EditText) findViewById(R.id.start_field)).getText().toString()));
-            item.setIncrement(Integer.valueOf(((EditText) findViewById(R.id.increment_field)).getText().toString()));
+            item.setValue(Double.valueOf(((EditText) findViewById(R.id.start_field)).getText().toString()));
+            item.setIncrement(Double.valueOf(((EditText) findViewById(R.id.increment_field)).getText().toString()));
             item.save();
 
             // if we're editing an active counter, we want its previous scheduled alarm to be cancelled

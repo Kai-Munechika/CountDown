@@ -37,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/start_value"
-            android:inputType="numberSigned"
+            android:inputType="numberSigned|numberDecimal"
             />
 
     </android.support.design.widget.TextInputLayout>
@@ -55,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/increment"
-            android:inputType="numberSigned"
+            android:inputType="numberSigned|numberDecimal"
             />
 
     </android.support.design.widget.TextInputLayout>

@@ -12,13 +12,13 @@ public class Item extends SugarRecord<Item> {
     private int minute;
     private TimePeriod timePeriod;
     private boolean isActive;
-    private int value;
-    private int increment;
+    private double value;
+    private double increment;
 
     public Item(){
     }
 
-    public Item(String title, int hour, int minute, TimePeriod timePeriod, boolean isActive, int value, int increment) {
+    public Item(String title, int hour, int minute, TimePeriod timePeriod, boolean isActive, double value, double increment) {
         this.title = title;
         this.hour = hour;
         this.minute = minute;
@@ -73,19 +73,58 @@ public class Item extends SugarRecord<Item> {
         isActive = active;
     }
 
-    public int getValue() {
+    public double getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public String getValueString() {
+        return getDecimalString(getValue());
+    }
+
+    public void setValue(double value) {
         this.value = value;
     }
 
-    public int getIncrement() {
+    public double getIncrement() {
         return increment;
     }
 
-    public void setIncrement(int increment) {
+    public String getIncrementString() {
+        return getDecimalString(getIncrement());
+    }
+
+    private String getDecimalString(double variable) {
+        if ((variable == Math.floor(variable)) && !Double.isInfinite(variable)) {
+            // integer type
+            return String.valueOf(Double.valueOf(variable).intValue());
+        }
+
+        String variableAsString = String.valueOf(variable);
+        int numDecimals = getNumDecimalPlaces(variableAsString);
+        if (numDecimals == 1) {
+            variableAsString = variableAsString + "0";
+        } else if (numDecimals > 5) {
+            int decimalsToPop = numDecimals - 5;
+            variableAsString = variableAsString.substring(0, variableAsString.length() - decimalsToPop);
+
+            // get rid of trailing 0s
+            variableAsString = !variableAsString.contains(".") ? variableAsString : variableAsString.replaceAll("0*$", "").replaceAll("\\.$", "");
+
+            if (getNumDecimalPlaces(variableAsString) == 1) { variableAsString = variableAsString + "0"; }
+        }
+
+        return variableAsString;
+    }
+
+    private int getNumDecimalPlaces(String variableAsString) {
+        if (variableAsString.contains(".")) {
+            String[] s = variableAsString.split("\\.");
+            return s[s.length - 1].length();
+        }
+        return 0;
+    }
+
+    public void setIncrement(double increment) {
         this.increment = increment;
     }
 
