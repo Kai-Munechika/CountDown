@@ -148,8 +148,8 @@ public class ItemCreationActivity extends AppCompatActivity {
         } else {
             item.setTitle(((EditText) findViewById(R.id.title_field)).getText().toString());
             item.setActive(true);
-            item.setValue(Double.valueOf(((EditText) findViewById(R.id.start_field)).getText().toString()));
-            item.setIncrement(Double.valueOf(((EditText) findViewById(R.id.increment_field)).getText().toString()));
+            item.setValue(Item.doubleToTwoDecimalPlaces(Double.valueOf(((EditText) findViewById(R.id.start_field)).getText().toString())));
+            item.setIncrement(Item.doubleToTwoDecimalPlaces(Double.valueOf(((EditText) findViewById(R.id.increment_field)).getText().toString())));
             item.save();
 
             // if we're editing an active counter, we want its previous scheduled alarm to be cancelled

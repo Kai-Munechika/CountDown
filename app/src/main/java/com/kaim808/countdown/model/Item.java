@@ -2,6 +2,8 @@ package com.kaim808.countdown.model;
 
 import com.orm.SugarRecord;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -99,29 +101,15 @@ public class Item extends SugarRecord<Item> {
             return String.valueOf(Double.valueOf(variable).intValue());
         }
 
-        String variableAsString = String.valueOf(variable);
-        int numDecimals = getNumDecimalPlaces(variableAsString);
-        if (numDecimals == 1) {
-            variableAsString = variableAsString + "0";
-        } else if (numDecimals > 5) {
-            int decimalsToPop = numDecimals - 5;
-            variableAsString = variableAsString.substring(0, variableAsString.length() - decimalsToPop);
-
-            // get rid of trailing 0s
-            variableAsString = !variableAsString.contains(".") ? variableAsString : variableAsString.replaceAll("0*$", "").replaceAll("\\.$", "");
-
-            if (getNumDecimalPlaces(variableAsString) == 1) { variableAsString = variableAsString + "0"; }
-        }
-
-        return variableAsString;
+        DecimalFormat df = new DecimalFormat("#.00");
+        df.setRoundingMode(RoundingMode.HALF_UP);
+        return df.format(variable);
     }
 
-    private int getNumDecimalPlaces(String variableAsString) {
-        if (variableAsString.contains(".")) {
-            String[] s = variableAsString.split("\\.");
-            return s[s.length - 1].length();
-        }
-        return 0;
+    public static double doubleToTwoDecimalPlaces(double d) {
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.HALF_UP);
+        return Double.valueOf(df.format(d));
     }
 
     public void setIncrement(double increment) {
